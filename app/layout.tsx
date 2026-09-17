@@ -1,5 +1,11 @@
-import Link from "next/link";
+// app/layout.tsx
 import "./globals.css";
+import Navbar from "../components/Navbar";
+
+export const metadata = {
+  title: "University Course Catalog",
+  description: "Browse CS courses built with Next.js 15",
+};
 
 export default function RootLayout({
   children,
@@ -8,15 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-gray-50 text-gray-900 min-h-screen">
-        <header className="border-b bg-white">
-          <nav className="max-w-4xl mx-auto px-4 py-4 flex gap-6 font-medium">
-            <Link href="/" className="hover:text-blue-600">Home</Link>
-            <Link href="/courses" className="hover:text-blue-600">Courses</Link>
-            <Link href="/about" className="hover:text-blue-600">About</Link>
-          </nav>
-        </header>
-        <main className="max-w-4xl mx-auto px-4 py-8">{children}</main>
+      <body className="bg-slate-950 text-slate-100 antialiased">
+        <Navbar />
+        {children}
       </body>
     </html>
   );
