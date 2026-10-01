@@ -1,37 +1,23 @@
-import LikeButton from "@/components/LikeButton";
-import { getCourse, getCourses } from "@/lib/courses";
-import { notFound } from "next/navigation";
+import CourseCard from "@/components/CourseCard";
+import * as CoursesData from "@/lib/courses";
 
-type CoursePageProps = {
-  params: Promise<{ id: string }>;
-};
-
-export async function generateStaticParams() {
-  const courses = await getCourses();
-  return courses.map((course) => ({
-    id: course.id,
-  }));
-}
-
-export default async function CourseDetailPage({ params }: CoursePageProps) {
-  const { id } = await params;
-  const course = await getCourse(id);
-
-  if (!course) {
-    notFound();
-  }
+export default function CoursesPage() {
+  // Fallback to whichever export name exists in your lib/courses file
+  const courseList = 
+    (CoursesData as any).courses || 
+    (CoursesData as any).default || 
+    [];
 
   return (
-    <div className="space-y-6 bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-      <div className="flex justify-between items-start">
-        <h1 className="text-3xl font-bold">{course.title}</h1>
-        <LikeButton initialLikes={course.likes} />
+    <main className="max-w-6xl mx-auto px-6 py-8">
+      <h1 className="text-3xl font-bold mb-6">Available Courses</h1>
+
+      {/* Responsive Grid Layout */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {courseList.map((course: any) => (
+          <CourseCard key={course.id} {...course} />
+        ))}
       </div>
-      <p className="text-gray-700 text-lg">{course.description}</p>
-      <div className="flex gap-4 text-sm text-gray-500 pt-4 border-t border-gray-100">
-        <span>Credits: {course.credits}</span>
-        <span>Type: {course.isElective ? "Elective" : "Core"}</span>
-      </div>
-    </div>
+    </main>
   );
 }
